@@ -26,6 +26,18 @@ public class EmployeeController {
 	@Autowired
 	EmployeeService service;
 	
+	@ResponseBody
+	@RequestMapping("/saveEmp")
+	public Msg saveEmployee(Employee emp) {
+		boolean isSave = service.saveEmployee(emp);
+		if(isSave) {
+			return Msg.success().add("data", "新增成功");
+		}else {
+			return Msg.fail();
+		}
+		
+	}
+	
 	@RequestMapping("/emps")
 	@ResponseBody
 	public Msg getEmps(@RequestParam(value = "pn",defaultValue = "1")Integer pn) {

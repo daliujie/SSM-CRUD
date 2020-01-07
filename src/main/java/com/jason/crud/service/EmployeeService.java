@@ -13,6 +13,15 @@ public class EmployeeService {
 	
 	@Autowired
 	EmployeeMapper mapper;
+	
+	/**
+	 * 保存员工方法
+	 * @param emp 新增的员工
+	 * @return
+	 */
+	public Boolean saveEmployee(Employee emp) {
+		return mapper.insertSelective(emp) == 1;
+	}
 
 	/**
 	 * 查询所有员工
