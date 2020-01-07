@@ -14,6 +14,7 @@
  -->
 <!-- 引入bootstrap样式 -->
 <link href="${APP_PATH}/static/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="./index.css" rel="stylesheet" />
 <!-- 引入jQuery.js -->
 <script type="text/javascript" src="${APP_PATH}/static/JQuery/jquery-3.4.1.min.js"></script>
 <!-- 引入bootstrap.js -->
@@ -66,6 +67,7 @@
 		</div>
 	</div>
 	
+	<!-- 新增员工弹窗 -->
 	<div class="modal fade" id="add_employee_modal" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
@@ -110,6 +112,25 @@
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 	        <button type="button" class="btn btn-primary" id="save_add_emp">保存</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	<!-- 删除员工弹窗 -->
+	<div class="modal fade" id="delete_employee_modal" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">删除员工</h4>
+	      </div>
+	      <div class="modal-body">
+	        	确认删除员工&nbsp;&nbsp;<span id="deleteEmpTip"></span>&nbsp;吗？
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+	        <button type="button" class="btn btn-primary" id="sure_dele_emp">确认</button>
 	      </div>
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->

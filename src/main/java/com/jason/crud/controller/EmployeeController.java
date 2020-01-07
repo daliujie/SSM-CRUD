@@ -35,7 +35,16 @@ public class EmployeeController {
 		}else {
 			return Msg.fail();
 		}
-		
+	}
+
+	@ResponseBody
+	@RequestMapping("/deleteEmp")
+	public Msg deleteEmployee(int empId) {
+		boolean hasDele = service.deleteEmployeeById(empId);
+		if(hasDele) {
+			return Msg.success();
+		}
+		return Msg.fail();
 	}
 	
 	@RequestMapping("/emps")

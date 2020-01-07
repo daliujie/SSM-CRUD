@@ -2,6 +2,7 @@ package com.jason.crud.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,13 @@ public class EmployeeService {
 	 */
 	public List<Employee> getAll() {
 		//这不是一个分页查询
-		
 		return mapper.selectByExampleWithDepartment(null);
+	}
+	/**
+	 * 删除员工
+	 */
+	public boolean deleteEmployeeById(int empId) {
+		return mapper.deleteByPrimaryKey(empId) == 1;
 	}
 		
 }
