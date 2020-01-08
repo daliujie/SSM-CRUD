@@ -11,6 +11,7 @@ $(function(){
 	
 	//新增按钮点击事件
 	$("#add_employee_btn").on('click',function(){
+		initFrom("#add_employee_modal");
 		$("#add_employee_modal").modal({
 			backdrop: "static",
 			show: true
@@ -79,7 +80,11 @@ $(function(){
 	
 	//保存新增员工方法
 	function saveAddEmp(){
-		///
+		
+		if(!validate_addemp_from()){
+			return ;
+		}
+		
 		$.ajax({
 			url:baseURL+"saveEmp",
 			type: "post",
@@ -92,6 +97,55 @@ $(function(){
 			}
 		})
 	}
+	
+	//校验新增员工表单数据
+	function validate_addemp_from(){
+		//拿到需要校验的数据
+		var name_validate_exp = /(^[a-zA-Z0-9_-]{6,16}$)|(^[\u2E80-\u9FFF]{2,5}$)/;
+		var email_validaye_exp = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+		var empName = $('#add_employee_modal input[name="empName"]').val();
+		var empEmail = $('#add_employee_modal input[name="email"]').val();
+		if(!name_validate_exp.test(empName)){
+			show_validate_msg($('#add_employee_modal input[name="empName"]'),"error","用户名可以是6-16位数字字母组合或者2-6位中文");
+			return false;
+		}else{
+			show_validate_msg($('#add_employee_modal input[name="empName"]'),"success","");
+		}
+		
+		if(!email_validaye_exp.test(empEmail)){
+			show_validate_msg($('#add_employee_modal input[name="email"]'),"error","邮箱格式不正确");
+			return false;
+		}else{
+			show_validate_msg($('#add_employee_modal input[name="email"]'),"success","");
+		}
+		return true;
+	}	
+	
+	
+	//校验表单显示
+	function show_validate_msg(ele,status,msg){
+		$(ele).parent().removeClass('has-success has-error')
+		if(status == "success"){
+			$(ele).parent().addClass('has-success');
+			$(ele).next("span").text("");
+		}else{
+			$(ele).parent().addClass('has-error');
+			$(ele).next("span").text(msg); 
+		}
+	}
+	
+	//初始化表单
+	function initFrom(ele){
+		$(ele)[0].reset;
+		var inputArr = $(ele).find('input');
+		inputArr.push($(ele).find('textarea'));
+		$.each(inputArr,function(index,item){
+			$(item).parent().removeClass('has-success has-error');
+			$(item).val('');
+			$(item).next('span').text("");
+		})
+	}
+	
 	
 	//获取员工信息详情
 	function getEmployeeById(rowData){
