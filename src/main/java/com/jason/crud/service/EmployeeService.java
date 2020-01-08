@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jason.crud.bean.Employee;
+import com.jason.crud.bean.EmployeeExample;
+import com.jason.crud.bean.EmployeeExample.Criteria;
 import com.jason.crud.dao.EmployeeMapper;
 
 @Service
@@ -49,6 +51,19 @@ public class EmployeeService {
 	public List<Employee> getAll() {
 		//这不是一个分页查询
 		return mapper.selectByExampleWithDepartment(null);
+	}
+	/**
+	 * 校验用户名是否可用
+	 * @param empName
+	 * @return
+	 */
+	public boolean checkEmployeeUserName(String empName) {
+		EmployeeExample employeeExample = new EmployeeExample();
+		Criteria createCriteria = employeeExample.createCriteria();
+		createCriteria.andEmpNameEqualTo(empName);
+		
+		List<Employee> selectByExample = mapper.selectByExample(employeeExample);
+		return selectByExample.size() == 0;
 	}
 	/**
 	 * 删除员工

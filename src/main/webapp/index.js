@@ -1,5 +1,5 @@
 $(function(){
-	let baseURL = "http://localhost:8088/ssm-crud/";
+	let baseURL = "http://localhost:8080/ssm-crud/";
 	let currPage = 1;
 	let lastPage = 2;
 	getDataByPagenum(currPage);
@@ -43,7 +43,29 @@ $(function(){
 	
 	//确认保存新增员工点击事件
 	$("#save_add_emp").on('click',function(){
+		if($(this).attr("check-flag") == "false"){
+			return false;
+		}
 		saveAddEmp();
+	})
+	
+	//员工名字输入监听事件
+	$('#add_employee_modal input[name="empName"]').on('change',function(){
+		$.ajax({
+			url: baseURL+"checkUserName",
+			type: "post",
+			data: "empName="+$(this).val(),
+			success: function(data){
+				if(data.code == 100){
+					show_validate_msg($('#add_employee_modal input[name="empName"]'),"success","用户名可用");
+					$("#save_add_emp").attr('check-flag',true)
+				}else{
+					show_validate_msg($('#add_employee_modal input[name="empName"]'),"fail","用户名不可用");
+					$("#save_add_emp").attr('check-flag',false)
+				}
+			}
+		})
+		
 	})
 	
 	//确认修改员工按钮
@@ -118,6 +140,7 @@ $(function(){
 		}else{
 			show_validate_msg($('#add_employee_modal input[name="email"]'),"success","");
 		}
+		
 		return true;
 	}	
 	
@@ -127,7 +150,7 @@ $(function(){
 		$(ele).parent().removeClass('has-success has-error')
 		if(status == "success"){
 			$(ele).parent().addClass('has-success');
-			$(ele).next("span").text("");
+			$(ele).next("span").text(msg);
 		}else{
 			$(ele).parent().addClass('has-error');
 			$(ele).next("span").text(msg); 

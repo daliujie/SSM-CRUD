@@ -38,6 +38,16 @@ public class EmployeeController {
 	}
 	
 	@ResponseBody
+	@RequestMapping("/checkUserName")
+	public Msg checkUserName(String empName) {
+		boolean flag = service.checkEmployeeUserName(empName);
+		if(flag) {
+			return Msg.success();
+		}
+		return Msg.fail();
+	}
+	
+	@ResponseBody
 	@RequestMapping("/deleteEmp")
 	public Msg deleteEmployee(int empId) {
 		boolean hasDele = service.deleteEmployeeById(empId);
