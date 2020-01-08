@@ -23,6 +23,24 @@ public class EmployeeService {
 	public Boolean saveEmployee(Employee emp) {
 		return mapper.insertSelective(emp) == 1;
 	}
+	
+	/**
+	 * 更新用户信息
+	 * @param emp 需要更新的用户
+ 	 * @return
+	 */
+	public Boolean uodataEmployee(Employee emp) {
+		return mapper.updateByPrimaryKeySelective(emp) == 1;
+	}
+	
+	/**
+	 * 获取员工详细信息
+	 * @param empId 员工id
+	 * @return 员工信息
+	 */
+	public Employee getEmployeeById(int empId) {
+		return mapper.selectByPrimaryKey(empId);
+	}
 
 	/**
 	 * 查询所有员工

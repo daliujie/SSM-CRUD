@@ -36,7 +36,7 @@ public class EmployeeController {
 			return Msg.fail();
 		}
 	}
-
+	
 	@ResponseBody
 	@RequestMapping("/deleteEmp")
 	public Msg deleteEmployee(int empId) {
@@ -44,6 +44,24 @@ public class EmployeeController {
 		if(hasDele) {
 			return Msg.success();
 		}
+		return Msg.fail();
+	}
+	
+	@ResponseBody
+	@RequestMapping("/emp")
+	public Msg getEmpById(int empId) {
+		Employee employee = service.getEmployeeById(empId);
+		return Msg.success().add("data", employee);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/uodataEmp")
+	public Msg updataEmployee(Employee employee) {
+		boolean hasUp = service.uodataEmployee(employee);
+		if(hasUp) {
+			return Msg.success();
+		}
+		
 		return Msg.fail();
 	}
 	

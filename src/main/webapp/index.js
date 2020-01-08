@@ -1,5 +1,5 @@
 $(function(){
-	let baseURL = "http://localhost:8080/ssm-crud/";
+	let baseURL = "http://localhost:8088/ssm-crud/";
 	let currPage = 1;
 	let lastPage = 2;
 	getDataByPagenum(currPage);
@@ -18,7 +18,7 @@ $(function(){
 		renderDeptSelect();
 	})
 	
-	//编辑按钮点击事件
+	//删除按钮点击事件
 	$("#emp_table tbody").on('click','button.dele-emp-btn',function(){
 		var rowData = $(this).parent().parent().data("rowData");
 		$("#delete_employee_modal").modal({
@@ -29,9 +29,37 @@ $(function(){
 		$("#sure_dele_emp").data('rowData',rowData);
 	})
 	
+	//编辑按钮点击事件
+	$("#emp_table tbody").on('click','button.edit-emp-btn',function(){
+		var rowData = $(this).parent().parent().data("rowData");
+		$("#sure_edit_emp").data('rowData',rowData);
+		$("#edit_employee_modal").modal({
+			backdrop: "ststic",
+			show: true
+		})
+		getEmployeeById(rowData);
+	})
+	
 	//确认保存新增员工点击事件
 	$("#save_add_emp").on('click',function(){
 		saveAddEmp();
+	})
+	
+	//确认修改员工按钮
+	$("#sure_edit_emp").on('click',function(){
+		var rowData = $(this).data('rowData');
+		$.ajax({
+			url:baseURL+"uodataEmp",
+			type: "post",
+			data:$("#editEmployeeForm").serialize() + '&empId='+rowData.empId,
+			success: function(data){
+				if(data.code == 100){
+					$("#edit_employee_modal").modal('hide');
+					getDataByPagenum(currPage);
+				}
+			}
+		})
+		
 	})
 	
 	//确认删除员工按钮点击事件
@@ -64,8 +92,30 @@ $(function(){
 			}
 		})
 	}
+	
+	//获取员工信息详情
+	function getEmployeeById(rowData){
+		$.ajax({
+			url: baseURL+"emp",
+			data: "empId="+rowData.empId,
+			success: function(data){
+				data = data.result.data;
+				
+				renderDeptSelect(data.dId);
+				
+				//回显员工信息
+				var $this = $('#edit_employee_modal');
+				$('input[name="empName"]',$this).val(data.empName).attr('readonly','readonly');
+				$('input[name="email"]',$this).val(data.email);
+				$('input[name="gender"][value='+data.gender+']',$this).attr('checked','true');
+				
+			}
+		})
+	}
+	
+	
 	//获取所有部门数据并渲染
-	function renderDeptSelect(){
+	function renderDeptSelect(id){
 		$('select[name="dId"]').empty();
 		$.ajax({
 			url:baseURL+"depts",
@@ -73,7 +123,7 @@ $(function(){
 			success: function(data){
 				data = data.result.data;
 				$.each(data,function(index,item){
-					$('select[name="dId"]').append(`<option value="${item.deptId}">${item.deptName}</option>`)
+					$('select[name="dId"]').append(`<option ${item.deptId == id ? 'selected' : ''} value="${item.deptId}">${item.deptName}</option>`)
 				})
 			}
 		})
