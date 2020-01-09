@@ -1,12 +1,31 @@
 package com.jason.crud.bean;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.EAN;
+/**
+ * 此处我们不使用jsr303校验，使用代码校验
+ * @author Administrator
+ *
+ */
+
 public class Employee {
     private Integer empId;
 
+    /**
+     * 自定义验证规则
+     * 详情可以看jsr303文档
+     */
+//    @Pattern(regexp = "",message = "")
     private String empName;
 
     private String gender;
-
+    
+    /**
+     * 加上此注释之后可以进行校验，只需要在封装的地方加上 @validate就可以了
+     */
+    @Email
     private String email;
 
     private Integer dId;

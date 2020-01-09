@@ -14,6 +14,7 @@ import com.github.pagehelper.PageInfo;
 import com.jason.crud.bean.Employee;
 import com.jason.crud.service.EmployeeService;
 import com.jason.crud.util.Msg;
+import com.sun.xml.internal.ws.wsdl.writer.document.Service;
 
 /**
  * 
@@ -47,6 +48,14 @@ public class EmployeeController {
 		}else {
 			return Msg.fail();
 		}
+	}
+	
+	@ResponseBody
+	@RequestMapping("deleteEmps")
+	public Msg deleteEmps(String empIds) {
+		int deleteEmployees = service.deleteEmployees(empIds);
+		
+		return Msg.success();
 	}
 	
 	@ResponseBody

@@ -18,7 +18,26 @@ $(function(){
 		})
 		renderDeptSelect();
 	})
-	
+	//批量删除按钮点击事件
+	$('#delete_employees_btn').on('click',function(){
+		var ipts = $("#emp_table tbody input[type='checkbox']:checked");
+		var names = [];
+		var ids = [];
+		if(ipts.length == 0){
+			return ;
+		}
+		$('#delete_employees_modal').modal({
+			backdrop: "static",
+			show: true
+		})
+		$.each(ipts,function(index,item){
+			names.push($(item).attr('data-ename'))
+			ids.push($(item).val())
+		})
+		
+		$("#delete_employees_modal #deleteEmpsTip").text(names.join(','));
+		$("#sure_dele_emps").data('ids',ids.join(','));
+	})
 	//删除按钮点击事件
 	$("#emp_table tbody").on('click','button.dele-emp-btn',function(){
 		var rowData = $(this).parent().parent().data("rowData");
@@ -29,6 +48,7 @@ $(function(){
 		$("#delete_employee_modal #deleteEmpTip").text(rowData.empName);
 		$("#sure_dele_emp").data('rowData',rowData);
 	})
+	
 	
 	//编辑按钮点击事件
 	$("#emp_table tbody").on('click','button.edit-emp-btn',function(){
@@ -47,6 +67,22 @@ $(function(){
 			return false;
 		}
 		saveAddEmp();
+	})
+	
+	//确认批量删除员工按钮点击事件
+	$('#sure_dele_emps').on('click',function(){
+		var ids = $(this).data('ids')
+		$.ajax({
+			url: baseURL+"deleteEmps",
+			data: "empIds="+ids,
+			success: function(data){
+				if(data.code == 100){
+					$('#delete_employees_modal').modal('hide');
+					getDataByPagenum(currPage);
+				}
+				console.log(data)
+			}
+		})
 	})
 	
 	//员工名字输入监听事件
@@ -258,6 +294,7 @@ $(function(){
 	function build_empTables(data){
 		var emps = data.list;
 		$.each(emps,function(index,item){
+			var intD =$('<td></td>').append($("<input type='checkbox' data-Ename='"+item.empName+"' value='"+item.empId+"' />"));
 			var indexD = $('<td></td>').append(index+1);
 			var nameD = $('<td></td>').append(item.empName);
 			var genderD = $('<td></td>').append(item.gender == "M" ? "男":"女");
@@ -266,7 +303,7 @@ $(function(){
 			var handleD = $('<td></td>').append(
 					'<button class="btn btn-success btn-sm edit-emp-btn" data-id="'+item.empId+'"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑</button>'+
 					'<button class="btn btn-danger btn-sm dele-emp-btn" data-id="'+item.empId+'"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除</button>');
-			var empTR = $('<tr></tr>').append(indexD)
+			var empTR = $('<tr></tr>').append(intD).append(indexD)
 							.append(nameD)
 							.append(genderD)
 							.append(emailD)

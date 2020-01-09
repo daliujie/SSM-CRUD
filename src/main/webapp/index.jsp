@@ -29,7 +29,7 @@
 			</div>
 			<div class="col-md-6" style="height: 69px;line-height: 69px;">
 				<button class="btn btn-success" id="add_employee_btn">新增</button>
-				<button class="btn btn-danger">删除</button>
+				<button class="btn btn-danger" id="delete_employees_btn">删除</button>
 			</div>
 		</div>
 		<!-- 表格部分 -->
@@ -38,6 +38,7 @@
 			<table class="table table-hover" id="emp_table">
 			  <thead>
 			  	<tr>
+			  	  <th>#</th>
 			  	  <th>序号</th>
 			  	  <th>姓名</th>
 			  	  <th>性别</th>
@@ -184,6 +185,25 @@
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 	        <button type="button" class="btn btn-primary" id="sure_dele_emp">确认</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	<!-- 批量删除员工弹窗 -->
+	<div class="modal fade" id="delete_employees_modal" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">删除员工</h4>
+	      </div>
+	      <div class="modal-body">
+	        	确认删除员工&nbsp;&nbsp;<span id="deleteEmpsTip"></span>&nbsp;吗？
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+	        <button type="button" class="btn btn-primary" id="sure_dele_emps">确认</button>
 	      </div>
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->

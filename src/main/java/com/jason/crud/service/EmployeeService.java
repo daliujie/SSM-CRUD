@@ -1,5 +1,7 @@
 package com.jason.crud.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -52,6 +54,22 @@ public class EmployeeService {
 		//这不是一个分页查询
 		return mapper.selectByExampleWithDepartment(null);
 	}
+	
+	public int deleteEmployees(String empIds) {
+		EmployeeExample employeeExample = new EmployeeExample();
+		Criteria createCriteria = employeeExample.createCriteria();
+		
+		String [] ids = empIds.split(",");
+		List<Integer> list = new ArrayList<Integer>();
+		
+		for (String integer : ids) {
+			list.add(Integer.parseInt(integer));
+		}
+		createCriteria.andEmpIdIn(list);
+		int deleteByExample = mapper.deleteByExample(employeeExample);
+		return deleteByExample;
+	}
+	
 	/**
 	 * 校验用户名是否可用
 	 * @param empName

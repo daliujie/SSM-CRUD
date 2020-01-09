@@ -2,7 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
 	https://maven.apache.org/xsd/maven-4.0.0.xsd"> 
- 
+  
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.jason</groupId>
 	<artifactId>ssm-crud</artifactId>
@@ -123,6 +123,14 @@
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
 		    <version>2.9.10.1</version>
+		</dependency>
+		
+		<!-- 导入JSR303校验依赖 -->
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		    <version>6.0.17.Final</version>
 		</dependency>
 		
 	</dependencies>
