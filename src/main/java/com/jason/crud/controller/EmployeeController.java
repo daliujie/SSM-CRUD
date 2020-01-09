@@ -29,6 +29,18 @@ public class EmployeeController {
 	@ResponseBody
 	@RequestMapping("/saveEmp")
 	public Msg saveEmployee(Employee emp) {
+		//对新增的用户进行校验
+		String email_validaye_exp = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
+		String name_validate_exp = "(^[a-zA-Z0-9_-]{6,16}$)|(^[\u2E80-\u9FFF]{2,5}$)";
+		
+		if(!emp.getEmpName().matches(name_validate_exp)) {
+			return Msg.fail().add("error_name","用户名可以是6-16位数字字母组合或者2-6位中文");
+		}
+		if(!emp.getEmail().matches(email_validaye_exp)) {
+			System.out.println("emp.getEmail()====" + emp.getEmail());
+			return Msg.fail().add("error_email","邮箱格式不正确");
+		}
+		
 		boolean isSave = service.saveEmployee(emp);
 		if(isSave) {
 			return Msg.success().add("data", "新增成功");
@@ -41,6 +53,12 @@ public class EmployeeController {
 	@RequestMapping("/checkUserName")
 	public Msg checkUserName(String empName) {
 		boolean flag = service.checkEmployeeUserName(empName);
+		
+		String name_validate_exp = "(^[a-zA-Z0-9_-]{6,16}$)|(^[\u2E80-\u9FFF]{2,5}$)";
+		if(!empName.matches(name_validate_exp)) {
+			return Msg.fail().add("error_name","用户名可以是6-16位数字字母组合或者2-6位中文");
+		}
+		
 		if(flag) {
 			return Msg.success();
 		}
@@ -67,6 +85,12 @@ public class EmployeeController {
 	@ResponseBody
 	@RequestMapping("/uodataEmp")
 	public Msg updataEmployee(Employee employee) {
+		
+		String email_validaye_exp = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
+		if(!employee.getEmail().matches(email_validaye_exp)) {
+			return Msg.fail().add("error_email","邮箱格式不正确");
+		}
+		
 		boolean hasUp = service.uodataEmployee(employee);
 		if(hasUp) {
 			return Msg.success();

@@ -139,6 +139,7 @@
 			    <label for="email" class="col-sm-2 control-label">Email</label>
 			    <div class="col-sm-10">
 			      <input type="email" name="email" class="form-control" placeholder="Email">
+			       <span class="help-block"></span>
 			    </div>
 			  </div>
 			  <div class="form-group">

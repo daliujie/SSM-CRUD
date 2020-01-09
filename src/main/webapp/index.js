@@ -60,7 +60,7 @@ $(function(){
 					show_validate_msg($('#add_employee_modal input[name="empName"]'),"success","用户名可用");
 					$("#save_add_emp").attr('check-flag',true)
 				}else{
-					show_validate_msg($('#add_employee_modal input[name="empName"]'),"fail","用户名不可用");
+					show_validate_msg($('#add_employee_modal input[name="empName"]'),"fail",data.result.error_name || "用户名不可用");
 					$("#save_add_emp").attr('check-flag',false)
 				}
 			}
@@ -71,6 +71,11 @@ $(function(){
 	//确认修改员工按钮
 	$("#sure_edit_emp").on('click',function(){
 		var rowData = $(this).data('rowData');
+		
+		if(!validate_editemp_from()){
+			return ;
+		}
+		
 		$.ajax({
 			url:baseURL+"uodataEmp",
 			type: "post",
@@ -79,6 +84,8 @@ $(function(){
 				if(data.code == 100){
 					$("#edit_employee_modal").modal('hide');
 					getDataByPagenum(currPage);
+				}else if(data.result.error_email){
+					show_validate_msg($('#edit_employee_modal input[name="email"]'),"error",data.result.error_email);
 				}
 			}
 		})
@@ -115,6 +122,13 @@ $(function(){
 				if(data.code == 100){
 					$("#add_employee_modal").modal('hide');
 					getDataByPagenum(lastPage);
+				}else{
+					if(data.result.error_name){//表示是名字错误
+						show_validate_msg($('#add_employee_modal input[name="empName"]'),"error",data.result.error_name);
+					}
+					if(data.result.error_email){//表示是邮箱错误
+						show_validate_msg($('#add_employee_modal input[name="email"]'),"error",data.result.error_email);
+					}
 				}
 			}
 		})
@@ -144,6 +158,22 @@ $(function(){
 		return true;
 	}	
 	
+	//校验新增员工表单数据
+	function validate_editemp_from(){
+		//拿到需要校验的数据
+		var name_validate_exp = /(^[a-zA-Z0-9_-]{6,16}$)|(^[\u2E80-\u9FFF]{2,5}$)/;
+		var email_validaye_exp = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+		var empEmail = $('#editEmployeeForm input[name="email"]').val();
+		
+		if(!email_validaye_exp.test(empEmail)){
+			show_validate_msg($('#editEmployeeForm input[name="email"]'),"error","邮箱格式不正确");
+			return false;
+		}else{
+			show_validate_msg($('#editEmployeeForm input[name="email"]'),"success","");
+		}
+		
+		return true;
+	}
 	
 	//校验表单显示
 	function show_validate_msg(ele,status,msg){
