@@ -2,10 +2,14 @@ package com.jason.crud.controller;
 
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -75,8 +79,8 @@ public class EmployeeController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/deleteEmp")
-	public Msg deleteEmployee(int empId) {
+	@RequestMapping(value="/emp/{empId}",method=RequestMethod.DELETE)
+	public Msg deleteEmployee(@PathVariable(value = "empId")Integer empId) {
 		boolean hasDele = service.deleteEmployeeById(empId);
 		if(hasDele) {
 			return Msg.success();
@@ -85,16 +89,19 @@ public class EmployeeController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/emp")
-	public Msg getEmpById(int empId) {
+	@RequestMapping(value="/emp/{empId}",method = RequestMethod.GET)
+	public Msg getEmpById(@PathVariable("empId")Integer empId) {
+		
+		System.out.println("empId======"+empId);
 		Employee employee = service.getEmployeeById(empId);
 		return Msg.success().add("data", employee);
 	}
 	
 	@ResponseBody
-	@RequestMapping("/uodataEmp")
+	@RequestMapping(value="/emp/{empId}",method=RequestMethod.PUT)
+//	@RequestMapping("/updataEmp")
 	public Msg updataEmployee(Employee employee) {
-		
+		//进行邮箱格式验证，还可以通过jsr303校验
 		String email_validaye_exp = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
 		if(!employee.getEmail().matches(email_validaye_exp)) {
 			return Msg.fail().add("error_email","邮箱格式不正确");
@@ -125,7 +132,6 @@ public class EmployeeController {
 //	@RequestMapping(value = "/emps")
 	public String getEmps(@RequestParam(value = "pn",defaultValue = "1")Integer pn,
 			Model model){
-		
 		//引入pagehelper插件
 		//在查询之前调用下面的方法
 		PageHelper.startPage(pn,5);
@@ -139,5 +145,4 @@ public class EmployeeController {
 		
 		return "empList";
 	}
-
 }

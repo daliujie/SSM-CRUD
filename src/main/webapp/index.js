@@ -113,9 +113,9 @@ $(function(){
 		}
 		
 		$.ajax({
-			url:baseURL+"uodataEmp",
-			type: "post",
-			data:$("#editEmployeeForm").serialize() + '&empId='+rowData.empId,
+			url:baseURL+"emp"+"/"+rowData.empId,
+			type: "put",
+			data:$("#editEmployeeForm").serialize(),
 			success: function(data){
 				if(data.code == 100){
 					$("#edit_employee_modal").modal('hide');
@@ -132,8 +132,8 @@ $(function(){
 	$("#sure_dele_emp").on('click',function(){
 		var rowData = $(this).data("rowData");
 		$.ajax({
-			url: baseURL+"deleteEmp",
-			data: "empId="+rowData.empId,
+			url: baseURL+"emp/" + rowData.empId,
+			type: "DELETE",
 			success: function(data){
 				if(data.code == 100){
 					$("#delete_employee_modal").modal('hide');
@@ -239,8 +239,9 @@ $(function(){
 	//获取员工信息详情
 	function getEmployeeById(rowData){
 		$.ajax({
-			url: baseURL+"emp",
-			data: "empId="+rowData.empId,
+			url: baseURL+"emp/"+rowData.empId,
+			type: "GET",
+			data: "",
 			success: function(data){
 				data = data.result.data;
 				
